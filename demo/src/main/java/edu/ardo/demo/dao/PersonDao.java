@@ -3,6 +3,7 @@ package edu.ardo.demo.dao;
 import edu.ardo.demo.model.Person;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PersonDao { // Data Access Object
@@ -14,4 +15,8 @@ public interface PersonDao { // Data Access Object
         return insertPerson(id, person);
     }
     List<Person> selectAllPeople();
+
+    int deletePersonById(UUID id);
+    int updatePersonById(UUID id, Person person);
+    Optional<Person> selectPersonById(UUID id);
 }

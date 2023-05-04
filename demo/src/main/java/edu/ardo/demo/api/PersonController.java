@@ -4,10 +4,16 @@ import com.sun.jdi.event.ExceptionEvent;
 import edu.ardo.demo.model.Person;
 import edu.ardo.demo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.validation.Valid;
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RequestMapping("api/v1/person")
@@ -21,8 +27,10 @@ public class PersonController {
         this.personService = personService;
     }
     @PostMapping // usado para mapear solicitacoes http post, o metodo e executado sempre que uma solicitacao post for feita
-    public void addPerson(@RequestBody Person person){
-        personService.addPerson(person);
+    public void addPerson(@RequestBody @Valid @NonNull Person person){
+        if(!person.getName().isBlank()){ // para evitar de adicionar pessoas com nomes vazios
+            personService.addPerson(person);
+        }
     }   // @ResquestBody e usado quando os dados sao trasmitidos como json no corpo da solicitacao http
 
     @GetMapping // usado para mapear o metodo de retorno GET
@@ -40,8 +48,11 @@ public class PersonController {
         return personService.deletePerson(id);
     }
     @PutMapping(path = "{id}")
-    public int updatePersonById(@PathVariable("id") UUID id, @RequestBody Person personUpdate){
-        return personService.updatePerson(id, personUpdate);
+    public int updatePersonById(@PathVariable("id") UUID id, @RequestBody @Valid Person personUpdate){
+        if(!personUpdate.getName().isEmpty()) { // para evitar de alterar pessoas com nomes vazios
+            return personService.updatePerson(id, personUpdate);
+        }
+            return 0;
     }
 
 }

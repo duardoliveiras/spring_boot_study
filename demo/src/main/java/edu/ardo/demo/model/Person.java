@@ -2,12 +2,13 @@ package edu.ardo.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
 public class Person {
 
-    private final UUID id; // indicador unico universal
-                          // garante que a probabilidade de gerar dois IDs identicos e quase nula
+    private final UUID id; // indicador unico universal  // garante que a probabilidade de gerar dois IDs identicos e quase nula
+    @NotBlank(message = "nome vazio")
     private final String name;
 
 
